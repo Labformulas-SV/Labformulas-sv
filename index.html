@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LabFórmulas por Jonatan Molina</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        .cabecera {
+            background: linear-gradient(135deg, #075985, #0f766e);
+            color: white;
+            padding: 28px 16px;
+            text-align: center;
+        }
+
+        .marca {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .icono-marca {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 58px;
+            height: 58px;
+            border: 2px solid #bae6fd;
+            border-radius: 14px;
+            font-size: 21px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .marca h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .marca p {
+            margin: 5px 0 0;
+            color: #bae6fd;
+        }
+
+        .eslogan {
+            margin: 18px 0 0;
+            font-size: 15px;
+        }
+
+        .contenedor {
+            max-width: 1000px;
+            margin: 24px auto;
+            padding: 0 16px;
+        }
+
+        .introduccion {
+            margin-bottom: 22px;
+            line-height: 1.6;
+        }
+
+        .pestanas {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 22px;
+        }
+
+        .pestanas button {
+            flex: 1;
+            min-width: 110px;
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .pestanas button.activa {
+            background: #075985;
+            color: white;
+        }
+
+        .panel {
+            display: none;
+        }
+
+        .panel.activo {
+            display: block;
+        }
+
+        .calculadora {
+            background: white;
+            padding: 22px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.07);
+        }
+
+        h2 {
+            color: #075985;
+            margin-top: 0;
+        }
+
+        h3 {
+            margin-top: 0;
+        }
+
+        .descripcion {
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        .campos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            margin: 18px 0;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 15px;
+            background: white;
+        }
+
+        button {
+            border: none;
+            border-radius: 7px;
+            padding: 12px 18px;
+            background: #0f766e;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .resultado {
+            display: none;
+            margin-top: 18px;
+            padding: 16px;
+            background: #ecfeff;
+            border-left: 4px solid #0f766e;
+            border-radius: 6px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        .resultado strong {
+            color: #075985;
+        }
+
+        .nota {
+            background: #fff7ed;
+            border-left: 4px solid #ea580c;
+            padding: 12px;
+            margin-top: 18px;
+            border-radius: 5px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .pie {
+            text-align: center;
+            padding: 28px 18px;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .pie button {
+            width: auto;
+            padding: 10px 18px;
+        }
+
+        #perfil {
+            max-width: 600px;
+            margin: 18px auto 0;
+            text-align: left;
+        }
+
+        @media (max-width: 480px) {
+            .marca h1 {
+                font-size: 26px;
+            }
+
+            .calculadora {
+                padding: 17px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="cabecera">
+        <div class="marca">
+            <div class="icono-marca">LF</div>
+            <div>
+                <h1>LabFórmulas</h1>
+                <p>por Jonatan Molina</p>
+            </div>
+        </div>
+
+        <p class="eslogan">
+            Ciencia de laboratorio, fórmulas y tecnología.
+        </p>
+    </header>
+
+    <main class="contenedor">
+
+        <div class="introduccion">
+            <h2>Calculadoras de laboratorio clínico</h2>
+            <p>
+                Herramientas de apoyo para realizar cálculos frecuentes
+                en el laboratorio clínico de manera práctica y organizada.
+            </p>
+        </div>
+
+        <nav class="pestanas">
+            <button type="button" class="activa"
+                onclick="mostrarPestana('renal', this)">Función renal</button>
+
+            <button type="button"
+                onclick="mostrarPestana('proteinas', this)">Proteínas</button>
+
+            <button type="button"
+                onclick="mostrarPestana('hematologia', this)">Hematología</button>
+
+            <button type="button"
+                onclick="mostrarPestana('diluciones', this)">Diluciones</button>
+
+            <button type="button"
+                onclick="mostrarPestana('unidades', this)">Unidades</button>
+        </nav>
+
+        <!-- FUNCIÓN RENAL -->
+        <section class="panel activo" data-tab="renal">
+
+            <div class="calculadora">
+                <h3>1. Depuración de creatinina en orina de 24 horas</h3>
+
+                <p class="descripcion">
+                    Calcula la depuración a partir de la creatinina urinaria,
+                    creatinina sérica y volumen total de orina recolectado.
+                </p>
+
+                <div class="campos">
+                    <div>
+                        <label for="creaOrina">Creatinina urinaria (mg/dL)</label>
+                        <input id="creaOrina" type="number" min="0"
+                            step="any" placeholder="Ej. 85">
+                    </div>
+
+                    <div>
+                        <label for="creaSuero">Creatinina sérica (mg/dL)</label>
+                        <input id="creaSuero" type="number" min="0"
+                            step="any" placeholder="Ej. 1.0">
+                    </div>
+
+                    <div>
+                        <label for="volumenOrina">Volumen de orina (mL/24 h)</label>
+                        <input id="volumenOrina" type="number" min="0"
+                            step="any" placeholder="Ej. 1800">
+                    </div>
+                </div>
+
+                <button type="button" onclick="depuracion()">
+                    Calcular depuración
+                </button>
+
+                <div id="resultadoDepuracion" class="resultado"></div>
+            </div>
+
+            <div class="calculadora">
+                <h3>2. Depuración corregida por superficie corporal</h3>
+
+                <p class="descripcion">
+                    Ajusta la depuración de creatinina a una superficie corporal
+                    estándar de 1.73 m² mediante la fórmula de Mosteller.
+                </p>
+
+                <div class="campos">
+                    <div>
+                        <label for="depuracionBase">Depuración (mL/min)</label>
+                        <input id="depuracionBase" type="number" min="0"
+                            step="any" placeholder="Ej. 95">
+                    </div>
+
+                    <div>
+                        <label for="peso">Peso (kg)</label>
+                        <input id="peso" type="number" min="0"
+                            step="any" placeholder="Ej. 70">
+                    </div>
+
+                    <div>
+                        <label for="talla">Talla (cm)</label>
+                        <input id="talla" type="number" min="0"
+                            step="any" placeholder="Ej. 170">
+                    </div>
+                </div>
+
+                <button type="button" onclick="normalizada()">
+                    Calcular
+                </button>
+
+                <div id="resultadoNormalizada" class="resultado"></div>
+            </div>
+
+            <div class="calculadora">
+                <h3>3. Filtrado glomerular estimado (CKD-EPI 2021)</h3>
+
+                <p class="descripcion">
+                    Estimación basada en creatinina sérica, edad y sexo.
+                    Fórmula CKD-EPI 2021 sin ajuste por raza.
+                </p>
+
+                <div class="campos">
+                    <div>
+                        <label for="ckdCreatinina">Creatinina sérica (mg/dL)</label>
+                        <input id="ckdCreatinina" type="number" min="0"
+                            step="any" placeholder="Ej. 1.0">
+                    </div>
+
+                    <div>
+                        <label for="ckdEdad">Edad (años)</label>
+                        <input id="ckdEdad" type="number" min="18"
+                            max="120" step="1" placeholder="Ej. 45">
+                    </div>
+
+                    <div>
+                        <label for="ckdSexo">Sexo utilizado por la ecuación</label>
+                        <select id="ckdSexo">
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="button" onclick="ckdepi()">
+                    Calcular filtrado estimado
+                </button>
+
+                <div id="resultadoCKD" class="resultado"></div>
+
+                <div class="nota">
+                    La ecuación CKD-EPI 2021 está destinada principalmente
+                    a adultos. La estimación no confirma por sí sola una
+                    enfermedad renal crónica; se requiere interpretación clínica.
+                </div>
+            </div>
+
+            <div class="calculadora">
+                <h3>4. Depuración estimada por Cockcroft-Gault</h3>
+
+                <p class="descripcion">
+                    Estima la depuración de creatinina usando edad, peso,
+                    sexo y creatinina sérica.
+                </p>
+
+                <div class="campos">
+                    <div>
+                        <label for="cgCreatinina">Creatinina sérica (mg/dL)</label>
+                        <input id="cgCreatinina" type="number" min="0"
+                            step="any" placeholder="Ej. 1.0">
+                    </div>
+
+                    <div>
+                        <label for="cgEdad">Edad (años)</label>
+                        <input id="cgEdad" type="number" min="18"
+                            max="120" step="1" placeholder="Ej. 45">
+                    </div>
+
+                    <div>
+                        <label for="cgPeso">Peso utilizado (kg)</label>
+                        <input id="cgPeso" type="number" min="0"
+                            step="any" placeholder="Ej. 70">
+                    </div>
+
+                    <div>
+                        <label for="cgSexo">Sexo utilizado por la ecuación</label>
+                        <select id="cgSexo">
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="button" onclick="cockcroft()">
+                    Calcular depuración estimada
+                </button>
+
+                <div id="resultadoCG" class="resultado"></div>
+
+                <div class="nota">
+                    El peso que debe utilizarse puede variar según el contexto
+                    clínico, especialmente en pacientes con obesidad o edema.
+                    No intercambiar este resultado con el filtrado CKD-EPI
+                    sin considerar la indicación clínica.
+                </div>
+            </div>
+
+        </section>
+
+        <!-- PROTEÍNAS -->
+        <section class="panel" data-tab="proteinas">
+
+            <div class="calculadora">
+                <h3>Proteínas, globulinas y relación A/G</h3>
+
+                <p class="descripcion">
+                    Calcula las globulinas por diferencia y la relación
+                    albúmina/globulinas.
+                </p>
+
+                <div class="campos">
+                    <div>
+                        <label for="proteinasTotales">Proteínas totales (g/dL)</label>
+                        <input id="proteinasTotales" type="number" min="0"
+                            step="any" placeholder="Ej. 7.0">
+                    </div>
+
+                    <div>
+                        <label for="albumina">Albúmina (g/dL)</label>
+                        <input id="albumina" type="number" min="0"
+                            step="any" placeholder="Ej. 4.0">
+                    </div>
+                </div>
+
+                <button type="button" onclick="calcularProteinas()">
+                    Calcular
+                </button>
+
+                <div id="resultadoProteinas" class="resultado"></div>
+            </div>
+            
+            <div class="calculadora">
+    <h3>Saturación de transferrina</h3>
+
+    <p class="descripcion">
+        Calcula el porcentaje de saturación de transferrina
+        a partir del hierro sérico y la capacidad total
+        de fijación del hierro (CTFH).
+    </p>
+
+    <div class="campos">
+        <div>
+            <label for="hierroSerico">
+                Hierro sérico (µg/dL)
+            </label>
+            <input id="hierroSerico" type="number"
+                min="0" step="any" placeholder="Ej. 90">
+        </div>
+
+        <div>
+            <label for="ctfh">
+                CTFH (µg/dL)
+            </label>
+            <input id="ctfh" type="number"
+                min="0" step="any" placeholder="Ej. 300">
+        </div>
+    </div>
+
+    <button type="button" onclick="calcularSaturacion()">
+        Calcular saturación
+    </button>
+
+    <div id="resultadoSaturacion" class="resultado"></div>
+
+    <div class="nota">
+        Introduce resultados expresados en las mismas unidades.
+        La interpretación debe realizarse según el intervalo
+        de referencia del laboratorio y el contexto clínico.
+    </div>
+</div>
+        </section>
+
+        <!-- HEMATOLOGÍA -->
+        <section class="panel" data-tab="hematologia">
+
+            <div class="calculadora">
+                <h3>Hematología</h3>
+
+                <p>
+                    Próximamente incorporaremos índices eritrocitarios,
+                    como VCM, HCM y CHCM, con sus unidades y fórmulas.
+                </p>
+            </div>
+
+        </section>
+
+        <!-- DILUCIONES -->
+        <section class="panel" data-tab="diluciones">
+
+            <div class="calculadora">
+                <h3>Calculadora de diluciones</h3>
+
+                <p class="descripcion">
+                    Calcula el factor de dilución y la concentración
+                    corregida de una muestra.
+                </p>
+
+                <div class="campos">
+                    <div>
+                        <label for="volMuestra">Volumen de muestra</label>
+                        <input id="volMuestra" type="number" min="0"
+                            step="any" placeholder="Ej. 1">
+                    </div>
+
+                    <div>
+                        <label for="volDiluyente">Volumen de diluyente</label>
+                        <input id="volDiluyente" type="number" min="0"
+                            step="any" placeholder="Ej. 49">
+                    </div>
+
+                    <div>
+                        <label for="resultadoDilucion">Resultado medido</label>
+                        <input id="resultadoDilucion" type="number"
+                            min="0" step="any" placeholder="Ej. 2.5">
+                    </div>
+                </div>
+
+                <button type="button" onclick="calcularDilucion()">
+                    Calcular dilución
+                </button>
+
+                <div id="resultadoDilucionFinal" class="resultado"></div>
+
+                <div class="nota">
+                    Ingresa los volúmenes reales de muestra y diluyente.
+                    La corrección supone que la dilución se preparó correctamente
+                    y que el método analítico admite ese procedimiento.
+                </div>
+            </div>
+
+        </section>
+
+        <!-- UNIDADES -->
+        <section class="panel" data-tab="unidades">
+
+            <div class="calculadora">
+                <h3>Conversión de creatinina</h3>
+
+                <p class="descripcion">
+                    Conversión entre mg/dL y µmol/L.
+                </p>
+
+                <div class="campos">
+                    <div>
+                        <label for="valorCreatinina">Creatinina (mg/dL)</label>
+                        <input id="valorCreatinina" type="number" min="0"
+                            step="any" placeholder="Ej. 1.0">
+                    </div>
+                </div>
+
+                <button type="button" onclick="convertirCreatinina()">
+                    Convertir a µmol/L
+                </button>
+
+                <div id="resultadoConversion" class="resultado"></div>
+
+                <p class="descripcion">
+                    Factor utilizado: 1 mg/dL ≈ 88.4 µmol/L.
+                </p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="pie">
+        <p><strong>LabFórmulas</strong> · por Jonatan Molina</p>
+
+        <p>
+            Proyecto independiente de tecnología aplicada al laboratorio clínico.
+        </p>
+
+        <p>© 2026 · Todos los derechos reservados.</p>
+
+        <button type="button" onclick="mostrarPerfil()">
+            Acerca del creador
+        </button>
+
+        <div id="perfil" class="resultado">
+            <h3>Jonatan Molina</h3>
+
+            <p>Profesional de Laboratorio Clínico.</p>
+
+            <p>
+                Creador de LabFórmulas, un proyecto orientado al desarrollo
+                de herramientas digitales para facilitar los cálculos y
+                la consulta de fórmulas utilizadas en el laboratorio clínico.
+            </p>
+
+            <p>
+                Mi objetivo es combinar la experiencia del laboratorio
+                con el desarrollo de software para crear herramientas
+                prácticas, accesibles y fundamentadas técnicamente.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        function leer(id) {
+            return Number(document.getElementById(id).value);
+        }
+
+        function mostrar(id, mensaje) {
+            const elemento = document.getElementById(id);
+            elemento.innerHTML = mensaje;
+            elemento.style.display = "block";
+        }
+
+        function ocultar(id) {
+            document.getElementById(id).style.display = "none";
+        }
+
+        function validarPositivos(valores) {
+            return valores.every(valor =>
+                Number.isFinite(valor) && valor > 0
+            );
+        }
+
+        function mostrarPestana(categoria, boton) {
+            document.querySelectorAll(".panel").forEach(panel => {
+                panel.classList.remove("activo");
+            });
+
+            document.querySelectorAll(".pestanas button").forEach(btn => {
+                btn.classList.remove("activa");
+            });
+
+            const panelSeleccionado =
+                document.querySelector('[data-tab="' + categoria + '"]');
+
+            if (panelSeleccionado) {
+                panelSeleccionado.classList.add("activo");
+            }
+
+            boton.classList.add("activa");
+        }
+
+        function depuracion() {
+            const orina = leer("creaOrina");
+            const suero = leer("creaSuero");
+            const volumen = leer("volumenOrina");
+
+            if (!validarPositivos([orina, suero, volumen])) {
+                alert("Ingresa valores mayores que cero en todos los campos.");
+                return;
+            }
+
+            const flujo = volumen / 1440;
+            const depuracion = (orina * flujo) / suero;
+
+            mostrar("resultadoDepuracion",
+                "<strong>Flujo urinario:</strong> " +
+                flujo.toFixed(3) + " mL/min<br>" +
+                "<strong>Depuración de creatinina:</strong> " +
+                depuracion.toFixed(2) + " mL/min"
+            );
+        }
+
+        function normalizada() {
+            const dep = leer("depuracionBase");
+            const peso = leer("peso");
+            const talla = leer("talla");
+
+            if (!validarPositivos([dep, peso, talla])) {
+                alert("Ingresa valores mayores que cero en todos los campos.");
+                return;
+            }
+
+            const superficie = Math.sqrt((talla * peso) / 3600);
+            const depCorregida = dep * (1.73 / superficie);
+
+            mostrar("resultadoNormalizada",
+                "<strong>Superficie corporal:</strong> " +
+                superficie.toFixed(2) + " m²<br>" +
+                "<strong>Depuración corregida:</strong> " +
+                depCorregida.toFixed(2) + " mL/min/1.73 m²"
+            );
+        }
+
+        function ckdepi() {
+            const scr = leer("ckdCreatinina");
+            const edad = leer("ckdEdad");
+            const sexo = document.getElementById("ckdSexo").value;
+
+            if (!validarPositivos([scr, edad]) ||
+                !Number.isInteger(edad) || edad < 18 || edad > 120) {
+                alert("Ingresa una creatinina positiva y una edad válida de 18 a 120 años.");
+                return;
+            }
+
+            const k = sexo === "F" ? 0.7 : 0.9;
+            const alfa = sexo === "F" ? -0.241 : -0.302;
+            const factorSexo = sexo === "F" ? 1.012 : 1;
+
+            const resultado = 142 *
+                Math.pow(Math.min(scr / k, 1), alfa) *
+                Math.pow(Math.max(scr / k, 1), -1.200) *
+                Math.pow(0.9938, edad) *
+                factorSexo;
+
+            mostrar("resultadoCKD",
+                "<strong>TFGe CKD-EPI 2021:</strong> " +
+                resultado.toFixed(2) + " mL/min/1.73 m²"
+            );
+        }
+
+        function cockcroft() {
+            const scr = leer("cgCreatinina");
+            const edad = leer("cgEdad");
+            const peso = leer("cgPeso");
+            const sexo = document.getElementById("cgSexo").value;
+
+            if (!validarPositivos([scr, edad, peso]) ||
+                !Number.isInteger(edad) || edad < 18 || edad > 120) {
+                alert("Ingresa valores positivos y una edad válida de 18 a 120 años.");
+                return;
+            }
+
+            let resultado = ((140 - edad) * peso) / (72 * scr);
+
+            if (sexo === "F") {
+                resultado *= 0.85;
+            }
+
+            if (resultado <= 0) {
+                alert("Revisa la edad y los valores ingresados.");
+                return;
+            }
+
+            mostrar("resultadoCG",
+                "<strong>Depuración estimada:</strong> " +
+                resultado.toFixed(2) + " mL/min"
+            );
+        }
+
+        function calcularProteinas() {
+            const totales = leer("proteinasTotales");
+            const albumina = leer("albumina");
+
+            if (!Number.isFinite(totales) ||
+                !Number.isFinite(albumina) ||
+                totales <= 0 || albumina <= 0) {
+                alert("Ingresa proteínas totales y albúmina mayores que cero.");
+                return;
+            }
+
+            const globulinas = totales - albumina;
+
+            if (globulinas <= 0) {
+                alert("La albúmina no puede ser igual o mayor que las proteínas totales.");
+                return;
+            }
+
+            const relacion = albumina / globulinas;
+
+            mostrar("resultadoProteinas",
+                "<strong>Globulinas calculadas:</strong> " +
+                globulinas.toFixed(2) + " g/dL<br>" +
+                "<strong>Relación A/G:</strong> " +
+                relacion.toFixed(2)
+            );
+        }
+
+        function calcularDilucion() {
+            const muestra = leer("volMuestra");
+            const diluyente = leer("volDiluyente");
+            const resultado = leer("resultadoDilucion");
+
+            if (!Number.isFinite(muestra) ||
+                !Number.isFinite(diluyente) ||
+                !Number.isFinite(resultado) ||
+                muestra <= 0 || diluyente < 0 || resultado < 0) {
+                alert("Revisa los volúmenes y el resultado medido.");
+                return;
+            }
+
+            const factor = (muestra + diluyente) / muestra;
+            const corregido = resultado * factor;
+
+            mostrar("resultadoDilucionFinal",
+                "<strong>Factor de dilución:</strong> " +
+                factor.toFixed(2) + "×<br>" +
+                "<strong>Resultado corregido:</strong> " +
+                corregido.toFixed(4)
+            );
+        }
+
+        function convertirCreatinina() {
+            const valor = leer("valorCreatinina");
+
+            if (!Number.isFinite(valor) || valor < 0) {
+                alert("Ingresa un valor válido de creatinina.");
+                return;
+            }
+
+            mostrar("resultadoConversion",
+                "<strong>Creatinina convertida:</strong> " +
+                (valor * 88.4).toFixed(2) + " µmol/L"
+            );
+        }
+
+        function mostrarPerfil() {
+            const perfil = document.getElementById("perfil");
+
+            perfil.style.display =
+                perfil.style.display === "block" ? "none" : "block";
+        }
+function calcularSaturacion() {
+    const hierro = parseFloat(
+        document.getElementById("hierroSerico").value
+    );
+    const ctfh = parseFloat(
+        document.getElementById("ctfh").value
+    );
+    const resultado = document.getElementById("resultadoSaturacion");
+
+    if (!resultado) {
+        alert("No se encuentra el espacio para mostrar el resultado.");
+        return;
+    }
+
+    if (!Number.isFinite(hierro) || !Number.isFinite(ctfh) ||
+        hierro <= 0 || ctfh <= 0) {
+        alert("Ingresa valores mayores que cero.");
+        return;
+    }
+
+    const saturacion = (hierro / ctfh) * 100;
+
+    resultado.textContent =
+        "Saturación de transferrina: " +
+        saturacion.toFixed(1) + " %";
+
+    resultado.style.display = "block";
+}
+    </script>
+
+</body>
+</html>
