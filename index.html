@@ -238,22 +238,28 @@
             </p>
         </div>
 
-        <nav class="pestanas">
-            <button type="button" class="activa"
-                onclick="mostrarPestana('renal', this)">Función renal</button>
+  <nav class="pestanas">
+    <button type="button" class="activa"
+        onclick="mostrarPestana('renal', this)">Función renal</button>
 
-            <button type="button"
-                onclick="mostrarPestana('proteinas', this)">Proteínas</button>
+    <button type="button"
+        onclick="mostrarPestana('proteinas', this)">Proteínas</button>
 
-            <button type="button"
-                onclick="mostrarPestana('hematologia', this)">Hematología</button>
+    <button type="button"
+        onclick="mostrarPestana('hematologia', this)">Hematología</button>
 
-            <button type="button"
-                onclick="mostrarPestana('diluciones', this)">Diluciones</button>
+    <button type="button"
+        onclick="mostrarPestana('coagulacion', this)">Coagulación</button>
 
-            <button type="button"
-                onclick="mostrarPestana('unidades', this)">Unidades</button>
-        </nav>
+        <button type="button"
+    onclick="mostrarPestana('bilirrubina', this)">Bilirrubina</button>
+    
+    <button type="button"
+        onclick="mostrarPestana('diluciones', this)">Diluciones</button>
+
+    <button type="button"
+        onclick="mostrarPestana('unidades', this)">Unidades</button>
+</nav>
 
         <!-- FUNCIÓN RENAL -->
         <section class="panel activo" data-tab="renal">
@@ -509,10 +515,99 @@
             </div>
 
         </section>
+ <!-- COAGULACIÓN -->
+<section class="panel" data-tab="coagulacion">
 
-        <!-- DILUCIONES -->
-        <section class="panel" data-tab="diluciones">
+    <div class="calculadora">
+        <h3>Tiempo de protrombina (TP) e INR</h3>
 
+        <p class="descripcion">
+            Calcula la razón del tiempo de protrombina y el INR
+            a partir del TP del paciente, el TP normal y el ISI.
+        </p>
+
+        <div class="campos">
+            <div>
+                <label for="tpPaciente">TP del paciente (segundos)</label>
+                <input id="tpPaciente" type="number"
+                    min="0" step="any" placeholder="Ej. 14.5">
+            </div>
+
+            <div>
+                <label for="tpNormal">TP normal (segundos)</label>
+                <input id="tpNormal" type="number"
+                    min="0" step="any" placeholder="Ej. 12.0">
+            </div>
+
+            <div>
+                <label for="isiReactivo">ISI del reactivo</label>
+                <input id="isiReactivo" type="number"
+                    min="0" step="any" placeholder="Ej. 1.0">
+            </div>
+        </div>
+
+        <button type="button" onclick="calcularTP()">
+            Calcular TP e INR
+        </button>
+
+        <div id="resultadoTP" class="resultado"></div>
+
+        <div class="nota">
+            Utiliza el ISI y el TP normal validados para el sistema
+            de tromboplastina empleado por tu laboratorio.
+        </div>
+    </div>
+
+</section>
+
+<!-- BILIRRUBINA -->
+<section class="panel" data-tab="bilirrubina">
+
+    <div class="calculadora">
+        <h3>Bilirrubina indirecta</h3>
+
+        <p class="descripcion">
+            Calcula la bilirrubina indirecta por diferencia entre
+            la bilirrubina total y la directa.
+        </p>
+
+        <div class="campos">
+            <div>
+                <label for="bilirrubinaTotal">
+                    Bilirrubina total (mg/dL)
+                </label>
+                <input id="bilirrubinaTotal" type="number"
+                    min="0" step="any" placeholder="Ej. 2.5">
+            </div>
+
+            <div>
+                <label for="bilirrubinaDirecta">
+                    Bilirrubina directa (mg/dL)
+                </label>
+                <input id="bilirrubinaDirecta" type="number"
+                    min="0" step="any" placeholder="Ej. 0.6">
+            </div>
+        </div>
+
+        <button type="button"
+            onclick="calcularBilirrubinaIndirecta()">
+            Calcular bilirrubina indirecta
+        </button>
+
+        <div id="resultadoBilirrubinaIndirecta"
+            class="resultado"></div>
+
+        <div class="nota">
+            Ambas mediciones deben estar expresadas en mg/dL.
+            El cálculo por diferencia puede verse afectado por la
+            imprecisión analítica de ambas determinaciones.
+        </div>
+    </div>
+
+</section>
+
+<!-- DILUCIONES -->
+<section class="panel" data-tab="diluciones">
             <div class="calculadora">
                 <h3>Calculadora de diluciones</h3>
 
@@ -858,6 +953,53 @@ function calcularSaturacion() {
         saturacion.toFixed(1) + " %";
 
     resultado.style.display = "block";
+}
+function calcularBilirrubinaIndirecta() {
+    const total = leer("bilirrubinaTotal");
+    const directa = leer("bilirrubinaDirecta");
+
+    if (!Number.isFinite(total) ||
+        !Number.isFinite(directa) ||
+        total < 0 || directa < 0) {
+        alert("Ingresa valores válidos de bilirrubina total y directa.");
+        return;
+    }
+
+    if (directa > total) {
+        alert("La bilirrubina directa no debe superar la total.");
+        return;
+    }
+
+    const indirecta = total - directa;
+
+    mostrar("resultadoBilirrubinaIndirecta",
+        "<strong>Bilirrubina indirecta:</strong> " +
+        indirecta.toFixed(2) + " mg/dL"
+    );
+}
+
+function calcularTP() {
+    const tpPaciente = leer("tpPaciente");
+    const tpNormal = leer("tpNormal");
+    const isi = leer("isiReactivo");
+
+    if (!Number.isFinite(tpPaciente) ||
+        !Number.isFinite(tpNormal) ||
+        !Number.isFinite(isi) ||
+        tpPaciente <= 0 || tpNormal <= 0 || isi <= 0) {
+        alert("Ingresa valores mayores que cero para TP, TP normal e ISI.");
+        return;
+    }
+
+    const razonTP = tpPaciente / tpNormal;
+    const inr = Math.pow(razonTP, isi);
+
+    mostrar("resultadoTP",
+        "<strong>Razón de TP:</strong> " +
+        razonTP.toFixed(2) + "<br>" +
+        "<strong>INR calculado:</strong> " +
+        inr.toFixed(2)
+    );
 }
     </script>
 
